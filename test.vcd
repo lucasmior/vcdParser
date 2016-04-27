@@ -18,3 +18,5 @@ $var wire 1 $ LOAD $end
 $var reg 4 % D [3:0] $end
 $var reg 4 & Q [3:0] $end
 $upscope $end
+
+$dump
