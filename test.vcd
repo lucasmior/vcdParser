@@ -1,0 +1,20 @@
+$date
+<date_and_time_specification>
+$end
+
+$version 2 
+<software_version>
+$end
+ 
+$timescale
+ 1 ps
+$end
+ 
+$scope module top $end
+$var wire 1 ! CLK $end
+$var wire 1 " RESET $end
+$var wire 1 # ENABLE $end
+$var wire 1 $ LOAD $end
+$var reg 4 % D [3:0] $end
+$var reg 4 & Q [3:0] $end
+$upscope $end

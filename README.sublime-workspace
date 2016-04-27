@@ -1,0 +1,454 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"size",
+				"sizeof"
+			],
+			[
+				"str",
+				"strlen"
+			],
+			[
+				"m",
+				"mutex"
+			],
+			[
+				"mutex",
+				"pthread_mutex_lock"
+			],
+			[
+				"send",
+				"sendUdpCmd"
+			],
+			[
+				"p",
+				"pthread_mutex_lock"
+			],
+			[
+				"st",
+				"strcmp"
+			],
+			[
+				"cmd",
+				"cmdSize"
+			],
+			[
+				"ec",
+				"echoBuffer"
+			],
+			[
+				"echo",
+				"echoBuffer"
+			],
+			[
+				"ip",
+				"ip"
+			],
+			[
+				"por",
+				"echoServPort"
+			],
+			[
+				"n",
+				"name"
+			],
+			[
+				"strc",
+				"strcpy"
+			],
+			[
+				"HER",
+				"HEARTBEAT"
+			],
+			[
+				"a",
+				"atributos"
+			],
+			[
+				"do",
+				"doScheduler"
+			],
+			[
+				"arg",
+				"argv"
+			],
+			[
+				"neig",
+				"neigh"
+			],
+			[
+				"S",
+				"SHUTDOWN"
+			],
+			[
+				"NAME",
+				"NAME_PARAMETER"
+			],
+			[
+				"C",
+				"CMD_SIZE"
+			],
+			[
+				"inc",
+				"include"
+			],
+			[
+				"recv",
+				"recvMsgSize"
+			],
+			[
+				"re",
+				"remainder"
+			],
+			[
+				"task",
+				"tasks"
+			],
+			[
+				"time",
+				"timeline"
+			],
+			[
+				"want",
+				"wantToProcess"
+			],
+			[
+				"ea",
+				"earlyDeadline"
+			],
+			[
+				"to",
+				"toCeil"
+			],
+			[
+				"coe",
+				"coefficients"
+			],
+			[
+				"de",
+				"deadline"
+			],
+			[
+				"coef",
+				"coefficients"
+			],
+			[
+				"FU",
+				"funtionW"
+			],
+			[
+				"co",
+				"coefficients"
+			],
+			[
+				"don",
+				"dontHave"
+			],
+			[
+				"aux",
+				"aux3"
+			],
+			[
+				"fun",
+				"funtionW"
+			],
+			[
+				"tim",
+				"time"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/lucasmior/installDocker.sh",
+		"/media/lucasmior/SAMSUNG/DevOps",
+		"/home/lucasmior/Desktop/STR/xenomai.c",
+		"/home/lucasmior/Desktop/STR/class2210/lucasmior.c",
+		"/home/lucasmior/Desktop/remoteDeviceControl/memory/main.c",
+		"/home/lucasmior/Desktop/remoteDeviceControl/Makefile",
+		"/home/lucasmior/Desktop/remoteDeviceControl/client.c",
+		"/home/lucasmior/Desktop/remoteDeviceControl/server.cpp",
+		"/home/lucasmior/Desktop/remoteDeviceControl/lcd_old.vhd",
+		"/home/lucasmior/Desktop/t.vhd",
+		"/home/lucasmior/Desktop/remoteDeviceControl/memory/memory.c",
+		"/home/lucasmior/Desktop/Redes/tf/server.cpp",
+		"/home/lucasmior/Desktop/Redes/tf/Makefile",
+		"/home/lucasmior/Desktop/Redes/tf/client.c",
+		"/home/lucasmior/Downloads/Faculdade/LabRedes/TCPEcho/TCPEchoServer.c",
+		"/home/lucasmior/fuck/pthread/UDPEchoClient.c",
+		"/home/lucasmior/Downloads/Faculdade/LabRedes/UDPEcho/UDPEchoServer.c",
+		"/home/lucasmior/fuck/pthread/test.c",
+		"/home/lucasmior/Downloads/Faculdade/TCPEcho/TCPEchoServer.c",
+		"/home/lucasmior/Downloads/Faculdade/UDPEcho/UDPEchoServer.c",
+		"/home/lucasmior/Downloads/Faculdade/TCPEcho/TCPEchoClient.c",
+		"/home/lucasmior/rateMonotonic/Makefile",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-005.res",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-005.in",
+		"/home/lucasmior/rateMonotonic/rm.c",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-005v2.res",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-005v2.in",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-004.in",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-004v2.in",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-004v2.res",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-004.res",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-003.in",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-003.res",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-000.in",
+		"/home/lucasmior/rateMonotonic/output.txt",
+		"/home/lucasmior/rateMonotonic/input.txt",
+		"/home/lucasmior/rateMonotonic/template.txt",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-002.res",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-002.in",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-001.res",
+		"/home/lucasmior/rateMonotonic/exemplos/exemplo-000.res"
+	],
+	"find":
+	{
+		"height": 26.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"UsedCpuOverhead",
+			"UsedCpuInit",
+			"RUSED",
+			"error",
+			"updateServer",
+			"HEArtbead",
+			"flag",
+			"cmd",
+			"tam",
+			"type",
+			"c",
+			"value",
+			"address",
+			"getCmd",
+			"parseMsg",
+			"Waiting",
+			"argv",
+			"main",
+			"shared",
+			"main",
+			"argv",
+			"shared",
+			"sharedD",
+			"sharedD	",
+			"main",
+			"echoServPort",
+			"parseMsg",
+			"fromSize",
+			"echoBuffer",
+			"echoStringLen",
+			"respStringLen",
+			"prm->linha",
+			"pthread_t",
+			"neigh",
+			"&m",
+			"&t->mutex",
+			"test",
+			"NAME",
+			"dontHave",
+			"choo",
+			"todo",
+			"printf",
+			"todo",
+			"choo",
+			"todo",
+			"p_list",
+			"choo",
+			"// @param cs",
+			"// @param preemption",
+			"choose",
+			"contextSwitching",
+			"cs",
+			"tc",
+			"last",
+			"// @param time",
+			"// @param timeline",
+			"// @param timeline      ",
+			"// @param prev",
+			"// @param numberOfTasks",
+			"// @param tasks",
+			"dontHa",
+			"Sort",
+			"sort",
+			"]",
+			"Sort",
+			"preemp",
+			"wantToProcess",
+			".deadline",
+			"tasks[i].deadline",
+			"timeline",
+			"DEAD",
+			"sort",
+			"choose",
+			"wanttoprocess",
+			"11 ",
+			"preemption",
+			"pree",
+			"cal",
+			"tc"
+		],
+		"highlight": false,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"addr",
+			"udpPort",
+			"tcpPort",
+			"t->v",
+			"&t->mutex",
+			"&m",
+			"sharedData",
+			"// @param cs            Number of context switching",
+			"// @param preemption    Number of preemptions",
+			"cs",
+			"// @param time          Time that is been scheduling",
+			"// @param timeline      Timeline of processor",
+			"// @param numberOfTasks Number of Tasks",
+			"// @param tasks         Array of tasks"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "README.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
