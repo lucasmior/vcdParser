@@ -1,22 +1,37 @@
 $date
-<date_and_time_specification>
+   Date text. For example: November 11, 2009.
 $end
-
-$version 2 
-<software_version>
+$version
+   VCD generator tool version info text.
 $end
- 
-$timescale
- 1 ps
+$comment
+   Any comment text.
 $end
- 
-$scope module top $end
-$var wire 1 ! CLK $end
-$var wire 1 " RESET $end
-$var wire 1 # ENABLE $end
-$var wire 1 $ LOAD $end
-$var reg 4 % D [3:0] $end
-$var reg 4 & Q [3:0] $end
+$timescale 1ps $end
+$scope module logic $end
+$var wire 8 # data $end
+$var wire 1 $ data_valid $end
+$var wire 1 % en $end
+$var wire 1 & rx_en $end
+$var wire 1 ' tx_en $end
+$var wire 1 ( empty $end
+$var wire 1 ) underrun $end
 $upscope $end
-
-$dump
+$enddefinitions $end
+$dumpvars
+0 #
+0$
+0%
+1&
+1'
+1(
+0)
+$end
+#0
+1 #
+0$
+1%
+0&
+1'
+0(
+0)
