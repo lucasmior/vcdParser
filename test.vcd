@@ -1,13 +1,5 @@
-$date
-   Date text. For example: November 11, 2009.
-$end
-$version
-   VCD generator tool version info text.
-$end
-$comment
-   Any comment text.
-$end
-$timescale 1ps $end
+$d
+$mior
 $scope module logic $end
 $var wire 8 # data $end
 $var wire 1 $ data_valid $end
@@ -21,17 +13,3 @@ $enddefinitions $end
 $dumpvars
 0 #
 0$
-0%
-1&
-1'
-1(
-0)
-$end
-#0
-1 #
-0$
-1%
-0&
-1'
-0(
-0)
