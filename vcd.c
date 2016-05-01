@@ -3,29 +3,21 @@
 #include <stdlib.h>
 #include "uthash.h"
 
+struct my_struct* find_user(int user_id);
+void add_user(struct my_struct *s);
 char* getLine(FILE* vcd);
 char* getWord(char* line);
 
 struct my_struct {
-  int key;
+  int key;					/* we'll use this field as the key */
   int state;
-  int frequence;            /* we'll use this field as the key */
+  int oneTime;
+  int zeroTime;
+  int currentTime;
+  int frequence;            
   char module[30];             
   UT_hash_handle hh; /* makes this structure hashable */
 };
-
-struct my_struct *users = NULL;
-
-void add_user(struct my_struct *s) {
-  HASH_ADD_INT( users, key, s );    
-}
-
-struct my_struct* find_user(int user_id) {
-  struct my_struct *s;
-
-  HASH_FIND_INT( users, &user_id, s );
-  return s;
-}
 
 int main( )
 {
@@ -117,7 +109,7 @@ int main( )
 	  	}
 	  	else
 	  	{
-	  		printf("SU IS NULL\n");			
+	  		printf("TIME CHANGING\n");			
 	  	} 
 	  	//printf("...END...\n");			
    	}
@@ -128,11 +120,11 @@ int main( )
 	struct my_struct* s;
   for(s=users; s != NULL; s=s->hh.next)
   {
-    printf("user id %c: frequence %d\n", s->key, s->frequence);
+    printf("key: %c: frequence: %d\n", s->key, s->frequence);
 	}
 	char key;
 	int freq = 0;
-	char clk = '#';
+	char clk = '!';
 	for(s=users; s != NULL; s=s->hh.next)
   {
   	if(s->key!=clk && s->frequence > freq)
@@ -141,11 +133,16 @@ int main( )
   		key = s->key;
   	}
 	}
-	printf("More change the status was: %c with: %d changes\n", key, freq );
+	printf("More changes was: %c with: %d changes\n", key, freq );
 	printf("\n");
   return 0;
 }
 
+
+
+/*
+    #### METHDS ######
+*/
 char* getWord(char* line)
 {
   char *word;
@@ -175,4 +172,19 @@ char* getLine(FILE* vcd)
   line = strtok(line, "\n");
   //printf("tam: %d | line: %s | \n", (int)strlen(line),line);
   return line;
+}
+
+/*
+    #### UTHASH METHDS ######
+*/
+struct my_struct *users = NULL;
+void add_user(struct my_struct *s) {
+  HASH_ADD_INT( users, key, s );    
+}
+
+struct my_struct* find_user(int user_id) {
+  struct my_struct *s;
+
+  HASH_FIND_INT( users, &user_id, s );
+  return s;
 }
