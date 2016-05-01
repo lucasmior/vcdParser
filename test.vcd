@@ -1,15 +1,18 @@
-$d
-$mior
 $scope module logic $end
 $var wire 8 # data $end
 $var wire 1 $ data_valid $end
-$var wire 1 % en $end
-$var wire 1 & rx_en $end
-$var wire 1 ' tx_en $end
-$var wire 1 ( empty $end
-$var wire 1 ) underrun $end
+$var wire 1 ! valid $end
+
+
 $upscope $end
-$enddefinitions $end
 $dumpvars
 0 #
-0$
+1 #
+0 #
+1 #
+1$
+0!
+1!
+0!
+#0202
+$end

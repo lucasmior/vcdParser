@@ -7,8 +7,8 @@ char* getLine(FILE* vcd);
 char* getWord(char* line);
 
 struct my_struct {
-  int id;
   int key;
+  int state;
   int frequence;            /* we'll use this field as the key */
   char module[30];             
   UT_hash_handle hh; /* makes this structure hashable */
@@ -41,14 +41,16 @@ int main( )
   char *word = malloc(sizeof(char)*100);
   char *module = malloc(sizeof(char)*30);
   const char end[] = "$dumpvars";
-  const char space[2] = " ";
+  const char end2[] = "$end";
+  const char space[] = " ";
+  struct my_struct* su;
   
   printf("Getting variables\n");
   do{
-    line = getLine(vcd);
+  	line = getLine(vcd);
+
     if(line != NULL)
     {
-
       strcpy(word, getWord(line));
       if( !strcmp(word, (char*)"$scope") )
       {
@@ -67,80 +69,110 @@ int main( )
         s->frequence = 0;
         strcpy(s->module, module);
         s->key = *word;
-        s->id = (int)*word;
-        add_user(s); 
+        s->state = -1;
+        add_user(s);
       }
+      //else printf("%d : %s\n", (int)strlen(word), word);
     }
-    //else { printf("!VARIABLE> %s %d\n", word, strlen(word)); printf("strcpm %d\n", strcmp(word, end));}// printf("%s %d\n", end, strlen(end));}
-    //else skip
-    //printf("%s\n",word );
-    //printf("%d\n", !feof(vcd));
   }while( strcmp(word, (char*)end) && !feof(vcd) );
 
-  printf("HERE\n");
-/*
-  struct my_struct* su;
-  su = malloc(sizeof(struct my_struct));
-  //strcpy( su, find_user('#'));
-  su = find_user((int)'#');
-  printf("HEREE\n");
-  if (su == NULL)
-  {
-    printf("NIL\n");
-  }
-  else{ 
-    su->frequence = 43;
-    printf("%s\n", su->module );
-    su = find_user((int)'#');
-    printf("%d\n", su->frequence );
-    //TODO
-  }*/
+  printf("\n");
   printf("Counting occurences\n");
+
+  //line = getLine(vcd);
+  //printf("%s\n", line);
   while(!feof(vcd))
-  {
+  {	
+  	//printf("new line\n");
     line = getLine(vcd);
+    //printf("Got new line\n");
     if(line != NULL)
     {
-      line = strtok(line, "\n");
-      printf("strlen: %ld %s\n", strlen(line), line);
-    }
-  }
-  printf("Showing results\n");
-  //TODO
+		  //printf("####################\n");
+      //printf("strlen: %ld | %s\n", strlen(line), line);
+      if( !strcmp(line, (char*)end2) ) break; 
+      
+    	char key = line[strlen(line)-1];
+		  int value = (int)line[0]-0x30;
+		  
+		  //printf("key:: %c | ", key);
+		  //printf("value: %d\n", value);
 
+		  su = find_user((int)key);
+		  if( su != NULL)
+		  {
+				if(su->state == -1)
+				{
+					//printf("STATE NULL \n");
+				 	su->state = value;
+				 	//printf("New state: %d\n", su->state);
+				}
+				else if(su->state != value)
+				{
+					//printf("STATE !NULL\n");
+					su->frequence = su->frequence + 1;
+					su->state = value;
+				 	//printf("New state: %d\n", su->state);
+				}
+	  	}
+	  	else
+	  	{
+	  		printf("SU IS NULL\n");			
+	  	} 
+	  	//printf("...END...\n");			
+   	}
+  }
+  printf("\n");
+  printf("Showing results\n");
+
+	struct my_struct* s;
+  for(s=users; s != NULL; s=s->hh.next)
+  {
+    printf("user id %c: frequence %d\n", s->key, s->frequence);
+	}
+	char key;
+	int freq = 0;
+	char clk = '#';
+	for(s=users; s != NULL; s=s->hh.next)
+  {
+  	if(s->key!=clk && s->frequence > freq)
+  	{
+  		freq = s->frequence;
+  		key = s->key;
+  	}
+	}
+	printf("More change the status was: %c with: %d changes\n", key, freq );
+	printf("\n");
   return 0;
 }
 
 char* getWord(char* line)
 {
   char *word;
-  char *l = malloc(sizeof(char)*100);
-  const char space[2] = " ";
+  //char *l = (char*)malloc(sizeof(char)*100);
 
   if(line != NULL)
   {
-    strcpy(l, line);
-    word = strtok(l, space);
-    // TODO Verify if it is needed.
-    //printf("strlen line: %d %s\n", strlen(line), line );
-    //printf("strlen word: %d %s\n", strlen(word), word );
-    if(strlen(line) == strlen(word) )
-    {
-      const char k[]="\n";
-      word[strlen(word)-2] = '\0';
-    //  word = strtok(word, k);
-      //printf("strlen word: %d %s\n", strlen(word), word );
-    }
+    //strcpy(l, line);
+    word = strtok(line, " ");
     return (char*)word;
   }
   return NULL;
 }
+
 char* getLine(FILE* vcd)
 {
   char *line = malloc(sizeof(char)*100);
-  if(fgets(line, 100, vcd) != NULL)
+  size_t tam = 100;
+  int n;
+
+  n = getline(&line, &tam, vcd);
+  // If print a blank line, it seg fault
+  if(n==0)
   {
-    return line;
+  	return NULL;
   }
-  return NULL;
+  line = strtok(line, "\n");
+  //printf("tam: %d | line: %s | \n", (int)strlen(line),line);
+  return line;
 }
