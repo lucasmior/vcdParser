@@ -3,14 +3,14 @@
 #include <stdlib.h>
 #include "uthash.h"
 
-struct my_struct* find_user(int user_id);
+struct my_struct* find_user(char* key);
 void add_user(struct my_struct *s);
 char* getLine(FILE* vcd);
 char* getWord(char* line);
 
 struct my_struct {
-  int key;					/* we'll use this field as the key */
-  int state;
+  char key[10];					/* we'll use this field as the key */
+  char state;
   int oneTime;
   int zeroTime;
   int currentTime;
@@ -19,10 +19,12 @@ struct my_struct {
   UT_hash_handle hh; /* makes this structure hashable */
 };
 
+struct my_struct *users = NULL;
+
 int main( )
 {
   FILE *vcd;
-  vcd = fopen("test.vcd", "rt");
+  vcd = fopen("kriti.vcd", "rt");
   if(vcd == NULL)
   {
     printf("Problem to open the file\n");
@@ -34,6 +36,7 @@ int main( )
   char *module = malloc(sizeof(char)*30);
   const char end[] = "$dumpvars";
   const char end2[] = "$end";
+  // TODO change to dumpall
   const char space[] = " ";
   struct my_struct* su;
   
@@ -60,8 +63,8 @@ int main( )
         s = malloc(sizeof(struct my_struct));
         s->frequence = 0;
         strcpy(s->module, module);
-        s->key = *word;
-        s->state = -1;
+        strcpy(s->key, word);
+        s->state = 'z'; //maybe x here..
         add_user(s);
       }
       //else printf("%d : %s\n", (int)strlen(word), word);
@@ -73,6 +76,7 @@ int main( )
 
   //line = getLine(vcd);
   //printf("%s\n", line);
+
   while(!feof(vcd))
   {	
   	//printf("new line\n");
@@ -82,24 +86,32 @@ int main( )
     {
 		  //printf("####################\n");
       //printf("strlen: %ld | %s\n", strlen(line), line);
-      if( !strcmp(line, (char*)end2) ) break; 
+      //if( !strcmp(line, (char*)end2) ){printf("OH NO!\n"); break;} 
       
-    	char key = line[strlen(line)-1];
-		  int value = (int)line[0]-0x30;
+    	//char key = line[strlen(line)-1];
+    	char* key = malloc(2);
+		  char value;
 		  
-		  //printf("key:: %c | ", key);
-		  //printf("value: %d\n", value);
+    	//TODO fix it, gambiarra rules!
+    	strcpy(key, line+1);
+		  value = line[0];
+		  
+		  //printf("key:: %s | ", key);
+		  //printf("value: %c\n", value);
 
-		  su = find_user((int)key);
+		  su = find_user(key);
 		  if( su != NULL)
 		  {
-				if(su->state == -1)
+				if(su->state == 'z')
 				{
 					//printf("STATE NULL \n");
 				 	su->state = value;
 				 	//printf("New state: %d\n", su->state);
 				}
-				else if(su->state != value)
+				else if(su->state != value && value != 'x')
+  /**
+				else
+	  **/
 				{
 					//printf("STATE !NULL\n");
 					su->frequence = su->frequence + 1;
@@ -109,7 +121,19 @@ int main( )
 	  	}
 	  	else
 	  	{
-	  		printf("TIME CHANGING\n");			
+	  		printf("TIME CHANGING\n");
+        for(s=users; s != NULL; s=s->hh.next)
+        {
+          if state == 0 and last == 0 or last == x
+            increase time0;
+          else if state == 1 and last == 1 or last == x
+            increase time1;
+          else state == 0 and last == 1
+            if timecurr > time0 then 
+              replace..
+            time0 = 1;
+          else time1 = 1;
+        }			
 	  	} 
 	  	//printf("...END...\n");			
    	}
@@ -118,22 +142,25 @@ int main( )
   printf("Showing results\n");
 
 	struct my_struct* s;
+  /**
   for(s=users; s != NULL; s=s->hh.next)
   {
-    printf("key: %c: frequence: %d\n", s->key, s->frequence);
+    printf("key: %s: frequence: %d\n", s->key, s->frequence);
 	}
-	char key;
+	**/
+	char* key;
 	int freq = 0;
-	char clk = '!';
+	char* clk = "\"";
 	for(s=users; s != NULL; s=s->hh.next)
   {
-  	if(s->key!=clk && s->frequence > freq)
+  	if(strcmp(s->key,clk) && s->frequence > freq)
   	{
   		freq = s->frequence;
+  		printf("new key is: %s\n", s->key );
   		key = s->key;
   	}
 	}
-	printf("More changes was: %c with: %d changes\n", key, freq );
+	printf("More changes was: %s with: %d changes\n", key, freq );
 	printf("\n");
   return 0;
 }
@@ -177,14 +204,13 @@ char* getLine(FILE* vcd)
 /*
     #### UTHASH METHDS ######
 */
-struct my_struct *users = NULL;
 void add_user(struct my_struct *s) {
-  HASH_ADD_INT( users, key, s );    
+  HASH_ADD_STR( users, key, s );    
 }
 
-struct my_struct* find_user(int user_id) {
+struct my_struct* find_user(char* key) {
   struct my_struct *s;
 
-  HASH_FIND_INT( users, &user_id, s );
+  HASH_FIND_STR( users, key, s );
   return s;
 }
