@@ -93,7 +93,6 @@ void showingResults()
 {
   struct my_struct* s;
   /**
-  **/
   printf("+-------+------+\n");
   for(s=users; s != NULL; s=s->hh.next)
   {
@@ -102,6 +101,7 @@ void showingResults()
     printf("|  %s\t|t1 %d\t|\n", s->key, s->time1);
   }
   printf("+-------+-------+\n");
+  **/
   char* key;
   char* time1;
   int t0 = 0, t1 = 0;
@@ -114,25 +114,25 @@ void showingResults()
     if(strcmp(s->key,clk) && s->frequence > freq)
     {
       freq = s->frequence;
-      printf("new key is: %s\n", s->key );
+      //printf("new key is: %s\n", s->key );
       key = s->key;
     }
     if(s->time0 > t0)
     {
       t0 = s->time0;
-      printf("new key is: %s\n", s->key );
+      //printf("new key is: %s\n", s->key );
       time0 = s->key;
     }
     if(s->time1 > t1)
     {
       t1 = s->time1;
-      printf("new key is: %s\n", s->key );
+      //printf("new key is: %s\n", s->key );
       time1 = s->key;
     }
   }
-  printf("More changes was: %s with: %d changes\n", key, freq );
-  printf("More changes was: %s with: %d changes\n", time0, t0 );
-  printf("More changes was: %s with: %d changes\n", time1, t1 );
+  printf("Most changes was: %s with: %d changes\n", key, freq );
+  printf("Most time0 was: %s with: %d changes\n", time0, t0 );
+  printf("Most time1 was: %s with: %d changes\n", time1, t1 );
   printf("\n");
 
 }
@@ -297,7 +297,6 @@ void getVariables(FILE* vcd)
         strtok(NULL, space);
         strtok(NULL, space);
         word = strtok(NULL, space);
-        //printf("Var:: %s\n", word);
         struct my_struct* s;
         s = malloc(sizeof(struct my_struct));
         s->frequence = 0;
@@ -305,6 +304,7 @@ void getVariables(FILE* vcd)
         s->time1 = 0;
         strcpy(s->module, module);
         strcpy(s->key, word);
+        printf("New variable:: %s | %s\n", s->key, s->module);
         s->state = 'z'; //maybe x here..
         add_user(s);
       }
