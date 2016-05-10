@@ -7,21 +7,28 @@ struct my_struct* find_user(char* key);
 void add_user(struct my_struct *s);
 char* getLine(FILE* vcd);
 char* getWord(char* line);
+void getVariables(FILE* vcd);
+void countingOccurrences(FILE* vcd);
+void showingResults();
+void getTiming(FILE* vcd);
 
 struct my_struct {
-  char key[10];					/* we'll use this field as the key */
+  char key[10];         /* we'll use this field as the key */
   char state;
-  int oneTime;
-  int zeroTime;
-  int currentTime;
+  char last;
+  int time1;
+  int time0;
+  int count;
+  int timecurr;
   int frequence;            
   char module[30];             
   UT_hash_handle hh; /* makes this structure hashable */
 };
 
 struct my_struct *users = NULL;
+long double timing = 0;
 
-int main( )
+int main()
 {
   FILE *vcd;
   vcd = fopen("kriti.vcd", "rt");
@@ -30,138 +37,19 @@ int main( )
     printf("Problem to open the file\n");
     return -1;
   } 
-  
-  char *line = malloc(sizeof(char)*100);
-  char *word = malloc(sizeof(char)*100);
-  char *module = malloc(sizeof(char)*30);
-  const char end[] = "$dumpvars";
-  const char end2[] = "$end";
-  // TODO change to dumpall
-  const char space[] = " ";
-  struct my_struct* su;
-  
-  printf("Getting variables\n");
-  do{
-  	line = getLine(vcd);
+  getTiming(vcd);
 
-    if(line != NULL)
-    {
-      strcpy(word, getWord(line));
-      if( !strcmp(word, (char*)"$scope") )
-      {
-        strtok(NULL, space);
-        module = strtok(NULL, space);
-        printf("Scope:: %s\n", module);
-      }
-      else if( !strcmp(word, (char*)"$var") )
-      {
-        strtok(NULL, space);
-        strtok(NULL, space);
-        word = strtok(NULL, space);
-        printf("Var:: %s\n", word);
-        struct my_struct* s;
-        s = malloc(sizeof(struct my_struct));
-        s->frequence = 0;
-        strcpy(s->module, module);
-        strcpy(s->key, word);
-        s->state = 'z'; //maybe x here..
-        add_user(s);
-      }
-      //else printf("%d : %s\n", (int)strlen(word), word);
-    }
-  }while( strcmp(word, (char*)end) && !feof(vcd) );
+  printf("Getting variables\n");
+  getVariables(vcd);
 
   printf("\n");
-  printf("Counting occurences\n");
+  printf("Counting occurrences\n");
+  countingOccurrences(vcd);
 
-  //line = getLine(vcd);
-  //printf("%s\n", line);
-
-  while(!feof(vcd))
-  {	
-  	//printf("new line\n");
-    line = getLine(vcd);
-    //printf("Got new line\n");
-    if(line != NULL)
-    {
-		  //printf("####################\n");
-      //printf("strlen: %ld | %s\n", strlen(line), line);
-      //if( !strcmp(line, (char*)end2) ){printf("OH NO!\n"); break;} 
-      
-    	//char key = line[strlen(line)-1];
-    	char* key = malloc(2);
-		  char value;
-		  
-    	//TODO fix it, gambiarra rules!
-    	strcpy(key, line+1);
-		  value = line[0];
-		  
-		  //printf("key:: %s | ", key);
-		  //printf("value: %c\n", value);
-
-		  su = find_user(key);
-		  if( su != NULL)
-		  {
-				if(su->state == 'z')
-				{
-					//printf("STATE NULL \n");
-				 	su->state = value;
-				 	//printf("New state: %d\n", su->state);
-				}
-				else if(su->state != value && value != 'x')
-  /**
-				else
-	  **/
-				{
-					//printf("STATE !NULL\n");
-					su->frequence = su->frequence + 1;
-					su->state = value;
-				 	//printf("New state: %d\n", su->state);
-				}
-	  	}
-	  	else
-	  	{
-	  		printf("TIME CHANGING\n");
-        for(s=users; s != NULL; s=s->hh.next)
-        {
-          if state == 0 and last == 0 or last == x
-            increase time0;
-          else if state == 1 and last == 1 or last == x
-            increase time1;
-          else state == 0 and last == 1
-            if timecurr > time0 then 
-              replace..
-            time0 = 1;
-          else time1 = 1;
-        }			
-	  	} 
-	  	//printf("...END...\n");			
-   	}
-  }
   printf("\n");
   printf("Showing results\n");
+  showingResults();
 
-	struct my_struct* s;
-  /**
-  for(s=users; s != NULL; s=s->hh.next)
-  {
-    printf("key: %s: frequence: %d\n", s->key, s->frequence);
-	}
-	**/
-	char* key;
-	int freq = 0;
-	char* clk = "\"";
-	for(s=users; s != NULL; s=s->hh.next)
-  {
-  	if(strcmp(s->key,clk) && s->frequence > freq)
-  	{
-  		freq = s->frequence;
-  		printf("new key is: %s\n", s->key );
-  		key = s->key;
-  	}
-	}
-	printf("More changes was: %s with: %d changes\n", key, freq );
-	printf("\n");
   return 0;
 }
 
@@ -170,6 +58,261 @@ int main( )
 /*
     #### METHDS ######
 */
+void getTiming(FILE* vcd)
+{
+
+  // TODO can add strtok here.. instead line[1]..
+  char *line = malloc(sizeof(char)*100);
+  const char end[] = "$timescale";
+  
+  do{
+    line = getLine(vcd);
+  }while( strcmp(line, (char*)end) && !feof(vcd) );
+
+  line = getLine(vcd);
+  //printf("%s\n", line);
+  int size = strlen(line);
+  char* unit = malloc(2);
+  strcpy(unit, &line[size-2]);
+
+  if(!strcmp(unit,"ms"))
+  {
+    timing = (line[1]-0x30) * 1000;
+  }
+  else if(!strcmp(unit,"us"))
+  {
+    timing = (line[1]-0x30) * 1000 * 1000;
+  }
+  else if(!strcmp(unit,"ns"))
+  {
+    timing = (line[1]-0x30) * 1000 * 1000 * 1000;
+  }  
+}
+
+void showingResults()
+{
+  struct my_struct* s;
+  /**
+  **/
+  printf("+-------+------+\n");
+  for(s=users; s != NULL; s=s->hh.next)
+  {
+    printf("|  %s\t|   %d\t|\n", s->key, s->frequence);
+    printf("|  %s\t|t0 %d\t|\n", s->key, s->time0);
+    printf("|  %s\t|t1 %d\t|\n", s->key, s->time1);
+  }
+  printf("+-------+-------+\n");
+  char* key;
+  char* time1;
+  int t0 = 0, t1 = 0;
+  char* time0;
+  int freq = 0;
+  char* clk = "\"";
+
+  for(s=users; s != NULL; s=s->hh.next)
+  {
+    if(strcmp(s->key,clk) && s->frequence > freq)
+    {
+      freq = s->frequence;
+      printf("new key is: %s\n", s->key );
+      key = s->key;
+    }
+    if(s->time0 > t0)
+    {
+      t0 = s->time0;
+      printf("new key is: %s\n", s->key );
+      time0 = s->key;
+    }
+    if(s->time1 > t1)
+    {
+      t1 = s->time1;
+      printf("new key is: %s\n", s->key );
+      time1 = s->key;
+    }
+  }
+  printf("More changes was: %s with: %d changes\n", key, freq );
+  printf("More changes was: %s with: %d changes\n", time0, t0 );
+  printf("More changes was: %s with: %d changes\n", time1, t1 );
+  printf("\n");
+
+}
+void calculateFrequence(FILE* vcd)
+{
+  char *line = malloc(sizeof(char)*100);
+  line = getLine(vcd);
+  //printf("%s\n",line );
+  char* frequence = malloc(6);
+  strcpy(frequence, line+1);
+  frequence[strlen(frequence)] = '\0';
+  int freq = atoi(frequence);
+  float f = ((float)1/(float)freq)*timing;
+  //printf("Frequence is %d\n", freq);
+  printf("Frequence is %.0fHz\n", f);
+
+}
+
+void countingOccurrences(FILE* vcd)
+{
+
+  char *line = malloc(sizeof(char)*100);
+  struct my_struct* su;
+  const char end[] = "$end";
+  // dumpvars
+  do{
+    line = getLine(vcd);
+    if(line != NULL)
+    {
+      char* key = malloc(4);
+      char value;
+      
+      //TODO fix it, gambiarra rules!
+      // Just work for bits values
+      // array doesnt work
+      strcpy(key, line+1);
+      key[strlen(key)] = '\0';
+      value = line[0];
+      su = find_user(key);
+      if(su != NULL)
+      {
+        su->state = value;
+      }
+    }
+  }while( strcmp(line, (char*)end) && !feof(vcd) );
+  calculateFrequence(vcd);
+
+  // changing values
+  while(!feof(vcd))
+  { 
+    line = getLine(vcd);
+    if(line != NULL)
+    {
+      char* key = malloc(4);
+      char value;
+      
+      //TODO fix it, gambiarra rules!
+      // Just work for bits values
+      // array doesnt work
+      strcpy(key, line+1);
+      key[strlen(key)] = '\0';
+      value = line[0];
+      
+      //printf("key:: %s | ", key);
+      //printf("value: %c\n", value);
+
+      su = find_user(key);
+      if(su != NULL)
+      {
+        su->last = su->state;
+        // dumpvars
+        if(su->state == 'z')
+        {
+          su->state = value;
+        }
+        else if(su->state != value && value != 'x')
+        {
+          //printf("STATE !NULL\n");
+          su->frequence = su->frequence + 1;
+          su->state = value;
+        }
+      }
+      else
+      {
+        //printf("TIME CHANGING\n");
+        for(su=users; su != NULL; su=su->hh.next)
+        {
+          //printf("state %c last %c\n",su->state, su->last );
+          if( su->state == '0' && (su->last == '0' || su->last == 'x' || su->last == 'z'))
+          {
+            su->timecurr = su->timecurr + 1;
+            //printf("ADD TIMECURR0 %d\n", su->timecurr);
+          }
+          else if( su->state == '1' && (su->last == '1' || su->last == 'x' || su->last == 'z'))
+          {
+            su->timecurr = su->timecurr + 1;
+            //printf("ADD TIMECURR1 %d\n", su->timecurr);
+          }
+          else if(su->state == '0' && su->last == '1')
+          { 
+            //printf("HERE3\n");
+            if (su->timecurr > su->time0)
+            {
+              su->time1 = su->timecurr;
+            }
+            su->timecurr = 1;
+          } 
+          else if( su->state == '1' && su->last == '0')
+          {
+            //printf("HERE4\n");
+            if (su->timecurr > su->time1)    
+            {
+              su->time0 = su->timecurr;
+            }
+            su->timecurr = 1;
+          }
+        }     
+      }     
+    }
+  }
+  
+  for(su=users; su != NULL; su=su->hh.next)
+  {
+    //printf("%d > %d ?", su->timecurr, su->time0);
+    if((su->timecurr > su->time0) && (su->state == '0'))
+    {
+      su->time0 = su->timecurr;
+    }
+    else if((su->timecurr > su->time1) && (su->state == '1'))
+    {
+      su->time1 = su->timecurr;
+    }
+  }
+}
+
+void getVariables(FILE* vcd)
+{
+  char *line = malloc(sizeof(char)*100);
+  char *word = malloc(sizeof(char)*100);
+  char *module = malloc(sizeof(char)*30);
+  const char end[] = "$dumpvars";
+  //  const char end2[] = "$end";
+  // TODO change to dumpall
+  const char space[] = " ";
+  //struct my_struct* su;
+
+
+  do{
+    line = getLine(vcd);
+
+    if(line != NULL)
+    {
+      strcpy(word, getWord(line));
+      if( !strcmp(word, (char*)"$scope") )
+      {
+        strtok(NULL, space);
+        module = strtok(NULL, space);
+        //printf("Scope:: %s\n", module);
+      }
+      else if( !strcmp(word, (char*)"$var") )
+      {
+        strtok(NULL, space);
+        strtok(NULL, space);
+        word = strtok(NULL, space);
+        //printf("Var:: %s\n", word);
+        struct my_struct* s;
+        s = malloc(sizeof(struct my_struct));
+        s->frequence = 0;
+        s->time0 = 0;
+        s->time1 = 0;
+        strcpy(s->module, module);
+        strcpy(s->key, word);
+        s->state = 'z'; //maybe x here..
+        add_user(s);
+      }
+      //else printf("%d : %s\n", (int)strlen(word), word);
+    }
+  }while( strcmp(word, (char*)end) && !feof(vcd) );
+}
+
 char* getWord(char* line)
 {
   char *word;
@@ -204,13 +347,13 @@ char* getLine(FILE* vcd)
 /*
     #### UTHASH METHDS ######
 */
-void add_user(struct my_struct *s) {
-  HASH_ADD_STR( users, key, s );    
-}
-
 struct my_struct* find_user(char* key) {
   struct my_struct *s;
 
   HASH_FIND_STR( users, key, s );
   return s;
+}
+
+void add_user(struct my_struct *s) {
+  HASH_ADD_STR( users, key, s );
 }
