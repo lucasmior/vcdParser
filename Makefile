@@ -5,6 +5,6 @@ all:
 run:
 	./vcd
 
-runTest:
-	gcc -Wall test.c -o test
-	./test
+clean:
+	rm vcd
+	rm *~
