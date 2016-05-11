@@ -19,6 +19,8 @@ void getVariables(FILE* vcd);
 void countingOccurrences(FILE* vcd);
 void showingResults();
 void getTiming(FILE* vcd);
+struct module* find_module(char* key);
+void add_module(struct module *s);
 
 struct my_struct {
   char key[10];         /* we'll use this field as the key */
@@ -30,8 +32,15 @@ struct my_struct {
   char module[30];             
   UT_hash_handle hh; /* makes this structure hashable */
 };
+struct module {
+  char key[30];         /* we'll use this field as the key */
+  int frequence;            
+  UT_hash_handle hh; /* makes this structure hashable */
+};
+
 
 struct my_struct *users = NULL;
+struct module *modules = NULL;
 long double timing = 0;
 
 int main()
@@ -96,6 +105,7 @@ void getTiming(FILE* vcd)
 void showingResults()
 {
   struct my_struct* s;
+  struct module* m;
   /**
   printf("+-------+------+\n");
   for(s=users; s != NULL; s=s->hh.next)
@@ -111,6 +121,8 @@ void showingResults()
   char* time0;
   int freq = 0;
   char* clk = "\"";
+
+
 
   for(s=users; s != NULL; s=s->hh.next)
   {
@@ -133,9 +145,19 @@ void showingResults()
       time1 = s->key;
     }
   }
+
+  printf("Modules::\n");
+  printf("+---------------+---------------+\n");
+  for(m=modules; m != NULL; m=m->hh.next)
+  {
+    printf("| %s\t| %d variables |\n",m->key, m->frequence );
+  }
+  printf("+---------------+---------------+\n");
+
+
   printf("Most changes was: %s with: %d changes\n", key, freq );
-  printf("Most idle time was: %s with: %d changes\n", time0, t0 );
-  printf("Less idle time was: %s with: %d changes\n", time1, t1 );
+  printf("Less idle was: %s with: %d changes\n", time0, t0 );
+  printf("Most idle was: %s with: %d changes\n", time1, t1 );
   printf("\n");
 
 }
@@ -278,6 +300,25 @@ void getVariables(FILE* vcd)
         printf("New variable:: %s | %s\n", s->key, s->module);
         s->state = 'z';
         add_user(s);
+
+        struct module* m;
+        //printf("Try\n");
+        m = find_module(s->module);
+        
+        //printf("OH NO!\n");
+        if(m == NULL)
+        {
+          //printf("HERE\n");
+          m = malloc(sizeof(struct module));
+          strcpy(m->key, module);
+          m->frequence = 1;
+          add_module(m);
+        }
+        else
+        {
+          //printf("HERE2\n");
+          m->frequence = m->frequence + 1;
+        }
       }
     }
   }while( strcmp(word, (char*)"$dumpvars") && !feof(vcd) );
@@ -303,7 +344,7 @@ char* getLine(FILE* vcd)
   n = getline(&line, &tam, vcd);
   if(n==0)
   {
-  	return NULL;
+    return NULL;
   }
   line = strtok(line, "\n");
   return line;
@@ -321,4 +362,15 @@ struct my_struct* find_user(char* key) {
 
 void add_user(struct my_struct *s) {
   HASH_ADD_STR( users, key, s );
+}
+
+struct module* find_module(char* key) {
+  struct module *s;
+
+  HASH_FIND_STR( modules, key, s );
+  return s;
+}
+
+void add_module(struct module *s) {
+  HASH_ADD_STR( modules, key, s );
 }
